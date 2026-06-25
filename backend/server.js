@@ -42,6 +42,7 @@ app.use('/api/upload', require('./routes/uploadRoutes'));
 app.use('/api/ai', require('./routes/aiRoutes'));
 app.use('/api/crm', require('./routes/crmRoutes'));
 app.use('/api/complaints', require('./routes/complaintRoutes'));
+app.use('/api/currency', require('./routes/currencyRoutes'));
 
 // Root endpoint for healthcheck
 app.get('/', (req, res) => {

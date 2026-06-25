@@ -5,7 +5,7 @@ import { getCategories } from '../services/categoryService';
 import PropertyCard from '../components/PropertyCard';
 import FilterSidebar from '../components/FilterSidebar';
 import Loading from '../components/Loading';
-import formatPrice from '../utils/formatPrice';
+import { useLocale } from '../context/LocaleContext';
 import { IoGrid, IoMap, IoFunnel, IoAlertCircleOutline, IoSearch, IoClose } from 'react-icons/io5';
 import L from 'leaflet';
 import markerIcon from 'leaflet/dist/images/marker-icon.png';
@@ -24,6 +24,7 @@ const Properties = () => {
   const location = useLocation();
   const mapContainerRef = useRef(null);
   const mapInstanceRef = useRef(null);
+  const { t, formatPrice } = useLocale();
 
   // States
   const [properties, setProperties] = useState([]);
@@ -138,7 +139,7 @@ const Properties = () => {
             <img src="${prop.images[0]}" style="width:100%; height:90px; object-cover; border-radius: 8px; margin-bottom: 8px;" />
             <h4 style="margin: 0; font-weight: bold; font-size: 13px; color: #1e293b; line-clamp: 1;">${prop.title}</h4>
             <span style="font-size: 11px; font-weight: 800; color: #10b981; display: block; margin: 4px 0;">${formatPrice(prop.price, prop.currency)}</span>
-            <a href="/properties/${prop._id}" style="display: block; text-align: center; background: #0f172a; color: white; border-radius: 6px; padding: 5px; font-size: 10px; font-weight: bold; text-decoration: none; margin-top: 4px;">Batafsil ko'rish</a>
+            <a href="/properties/${prop._id}" style="display: block; text-align: center; background: #0f172a; color: white; border-radius: 6px; padding: 5px; font-size: 10px; font-weight: bold; text-decoration: none; margin-top: 4px;">${t('details')}</a>
           </div>
         `;
 
@@ -157,7 +158,7 @@ const Properties = () => {
       map.remove();
       mapInstanceRef.current = null;
     };
-  }, [viewMode, properties]);
+  }, [viewMode, properties, t, formatPrice]);
 
   const handleSearchSubmit = (e) => {
     e.preventDefault();
@@ -176,7 +177,7 @@ const Properties = () => {
         <form onSubmit={handleSearchSubmit} className="flex-grow max-w-md relative flex items-center">
           <input
             type="text"
-            placeholder="Nomi, manzili yoki tuman bo'yicha qidirish..."
+            placeholder={t('searchListingsPlaceholder')}
             value={searchVal}
             onChange={(e) => setSearchVal(e.target.value)}
             className="w-full pl-10 pr-10 py-2.5 rounded-xl border border-slate-200 text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-primary-500 shadow-sm placeholder:text-slate-300"
@@ -204,7 +205,7 @@ const Properties = () => {
             className="flex md:hidden items-center gap-1.5 px-4 py-2.5 rounded-xl bg-slate-50 text-slate-700 hover:bg-slate-100 border border-slate-200 font-bold text-xs active:scale-95"
           >
             <IoFunnel className="h-4.5 w-4.5 text-slate-500" />
-            Filtr
+            {t('filters')}
           </button>
 
           {/* Grid vs Map views switches */}
@@ -218,7 +219,7 @@ const Properties = () => {
               }`}
             >
               <IoGrid className="h-4 w-4" />
-              Ro'yxat
+              {t('list')}
             </button>
             <button
               onClick={() => setViewMode('map')}
@@ -229,7 +230,7 @@ const Properties = () => {
               }`}
             >
               <IoMap className="h-4 w-4" />
-              Xarita
+              {t('map')}
             </button>
           </div>
         </div>
@@ -259,7 +260,7 @@ const Properties = () => {
           {/* Listings count header */}
           <div className="flex items-center justify-between text-left">
             <span className="text-sm font-semibold text-slate-500">
-              Jami <span className="text-slate-800 font-bold">{properties.length} ta</span> uy e'loni topildi
+              {t('totalFound', { count: properties.length })}
             </span>
           </div>
 
@@ -271,9 +272,9 @@ const Properties = () => {
               <div className="mx-auto h-16 w-16 text-slate-350">
                 <IoAlertCircleOutline className="h-full w-full" />
               </div>
-              <h3 className="mt-4 text-base font-bold text-slate-850">Hech qanday e'lon topilmadi</h3>
+              <h3 className="mt-4 text-base font-bold text-slate-850">{t('noListings')}</h3>
               <p className="mt-2 text-sm text-slate-400 max-w-xs mx-auto">
-                Kiritilgan filtr parametrlariga mos uylar topilmadi. Qidiruv parametrlarini o'zgartirib ko'ring.
+                {t('noListingsText')}
               </p>
             </div>
           ) : viewMode === 'grid' ? (

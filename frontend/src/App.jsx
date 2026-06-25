@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 // Providers
 import { AuthProvider } from './context/AuthContext';
 import { ToastProvider } from './context/ToastContext';
+import { LocaleProvider, useLocale } from './context/LocaleContext';
 
 // Layouts
 import MainLayout from './layouts/MainLayout';
@@ -31,18 +32,19 @@ import ProtectedRoute from './components/ProtectedRoute';
 
 // 404 Page Component
 const NotFound = () => {
+  const { t } = useLocale();
   return (
     <div className="mx-auto max-w-7xl px-4 py-20 text-center space-y-5 text-slate-800">
       <div className="text-6xl font-black text-primary-900">404</div>
-      <h2 className="text-xl font-bold">Sahifa topilmadi</h2>
+      <h2 className="text-xl font-bold">404</h2>
       <p className="text-sm text-slate-500 max-w-xs mx-auto">
-        Kechirasiz, siz qidirayotgan sahifa mavjud emas yoki boshqa manzilga ko'chirilgan.
+        {t('notFound')}
       </p>
       <Link
         to="/"
         className="inline-block px-5 py-2.5 rounded-xl bg-primary-900 text-white font-bold text-sm shadow-md"
       >
-        Bosh sahifaga qaytish
+        {t('navHome')}
       </Link>
     </div>
   );
@@ -52,9 +54,10 @@ import { Link } from 'react-router-dom';
 function App() {
   return (
     <ToastProvider>
-      <AuthProvider>
-        <Router>
-          <Routes>
+      <LocaleProvider>
+        <AuthProvider>
+          <Router>
+            <Routes>
             {/* Public Layout Routes */}
             <Route path="/" element={<MainLayout />}>
               <Route index element={<Home />} />
@@ -99,9 +102,10 @@ function App() {
               <Route path="categories" element={<AdminCategories />} />
               <Route path="requests" element={<AdminRequests />} />
             </Route>
-          </Routes>
-        </Router>
-      </AuthProvider>
+            </Routes>
+          </Router>
+        </AuthProvider>
+      </LocaleProvider>
     </ToastProvider>
   );
 }
