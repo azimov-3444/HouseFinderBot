@@ -2,9 +2,8 @@ services:
   - type: web
     name: house-finder-backend
     runtime: node
-    rootDir: backend
-    buildCommand: npm install
-    startCommand: npm start
+    buildCommand: cd backend && npm install
+    startCommand: cd backend && node server.js
     autoDeployTrigger: commit
     envVars:
       - key: NODE_ENV
