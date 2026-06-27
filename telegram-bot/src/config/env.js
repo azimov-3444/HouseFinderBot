@@ -13,6 +13,9 @@ const env = {
   webhookUrl: process.env.WEBHOOK_URL || '',
   port: Number(process.env.PORT || 7000),
   nodeEnv: process.env.NODE_ENV || 'development',
+  allowInsecureTls:
+    process.env.ALLOW_INSECURE_TLS === 'true' ||
+    (process.env.ALLOW_INSECURE_TLS !== 'false' && (process.env.NODE_ENV || 'development') === 'development'),
 };
 
 module.exports = env;

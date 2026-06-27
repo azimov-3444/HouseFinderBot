@@ -5,6 +5,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import { AuthProvider } from './context/AuthContext';
 import { ToastProvider } from './context/ToastContext';
 import { LocaleProvider, useLocale } from './context/LocaleContext';
+import { ThemeProvider } from './context/ThemeContext';
 
 // Layouts
 import MainLayout from './layouts/MainLayout';
@@ -54,10 +55,11 @@ import { Link } from 'react-router-dom';
 function App() {
   return (
     <ToastProvider>
-      <LocaleProvider>
-        <AuthProvider>
-          <Router>
-            <Routes>
+      <ThemeProvider>
+        <LocaleProvider>
+          <AuthProvider>
+            <Router>
+              <Routes>
             {/* Public Layout Routes */}
             <Route path="/" element={<MainLayout />}>
               <Route index element={<Home />} />
@@ -102,10 +104,11 @@ function App() {
               <Route path="categories" element={<AdminCategories />} />
               <Route path="requests" element={<AdminRequests />} />
             </Route>
-            </Routes>
-          </Router>
-        </AuthProvider>
-      </LocaleProvider>
+              </Routes>
+            </Router>
+          </AuthProvider>
+        </LocaleProvider>
+      </ThemeProvider>
     </ToastProvider>
   );
 }

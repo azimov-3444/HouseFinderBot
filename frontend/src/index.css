@@ -19,6 +19,13 @@
       linear-gradient(180deg, #f7f8f4 0%, #ffffff 42%, #f8fafc 100%);
   }
 
+  .dark body {
+    @apply text-slate-100;
+    background:
+      radial-gradient(circle at top left, rgba(16, 185, 129, 0.16), transparent 32rem),
+      linear-gradient(180deg, #020617 0%, #07111f 42%, #0f172a 100%);
+  }
+
   ::selection {
     background: #34d399;
     color: #020617;
@@ -35,11 +42,91 @@
   border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
+.dark .glass-effect {
+  background: rgba(15, 23, 42, 0.76);
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
 .dark-glass-effect {
   background: rgba(15, 23, 42, 0.75);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.dark .bg-\[\#f7f8f4\],
+.dark .bg-slate-50 {
+  background-color: #020617;
+}
+
+.dark .bg-white {
+  background-color: #0f172a;
+}
+
+.dark .bg-slate-100 {
+  background-color: #1e293b;
+}
+
+.dark .bg-slate-950 {
+  background-color: #020617;
+}
+
+.dark .text-slate-950,
+.dark .text-slate-900,
+.dark .text-slate-850,
+.dark .text-slate-800,
+.dark .text-slate-700 {
+  color: #f8fafc;
+}
+
+.dark .text-slate-600,
+.dark .text-slate-500,
+.dark .text-slate-450,
+.dark .text-slate-400 {
+  color: #cbd5e1;
+}
+
+.dark .border-slate-300,
+.dark .border-slate-250,
+.dark .border-slate-200,
+.dark .border-slate-150,
+.dark .border-slate-100,
+.dark .border-slate-50 {
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.dark input,
+.dark select,
+.dark textarea {
+  background-color: rgba(15, 23, 42, 0.92);
+  border-color: rgba(255, 255, 255, 0.12);
+  color: #f8fafc;
+}
+
+.dark input::placeholder,
+.dark textarea::placeholder {
+  color: #94a3b8;
+}
+
+.dark option {
+  background-color: #0f172a;
+  color: #f8fafc;
+}
+
+.dark .shadow-sm,
+.dark .shadow-md,
+.dark .shadow-lg,
+.dark .shadow-xl,
+.dark .shadow-2xl {
+  --tw-shadow-color: rgba(0, 0, 0, 0.45);
+}
+
+.dark .bg-emerald-400.text-slate-950,
+.dark .bg-amber-300.text-slate-950,
+.dark .bg-emerald-500.text-slate-950,
+.dark .bg-white.text-slate-950,
+.dark .hover\:text-slate-950:hover {
+  color: #020617;
 }
 
 /* Custom Scrollbars */
@@ -52,8 +139,16 @@
   @apply bg-slate-100;
 }
 
+.dark ::-webkit-scrollbar-track {
+  background-color: #020617;
+}
+
 ::-webkit-scrollbar-thumb {
   @apply bg-slate-300 rounded-full hover:bg-slate-400 transition-colors;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background-color: #334155;
 }
 
 /* Hide Default Map Controls if needed or styling Leaflet */
@@ -74,6 +169,17 @@
   color: #1e293b !important;
   border-bottom: 1px solid #f1f5f9 !important;
   transition: all 0.2s;
+}
+
+.dark .leaflet-bar a {
+  background-color: #0f172a !important;
+  color: #f8fafc !important;
+  border-bottom-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+.dark .leaflet-bar a:hover {
+  background-color: #1e293b !important;
+  color: #34d399 !important;
 }
 
 .leaflet-bar a:hover {

@@ -24,7 +24,7 @@ app.use(cookieParser());
 // CORS configuration (crucial for cookies to work!)
 app.use(
   cors({
-    origin: process.env.CLIENT_URL || 'http://localhost:5173',
+    origin:  "*", // Allow all origins for development; adjust in production
     credentials: true,
   })
 );

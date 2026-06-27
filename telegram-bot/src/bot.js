@@ -1,4 +1,5 @@
 const TelegramBot = require('node-telegram-bot-api');
+const mongoose = require('mongoose');
 const env = require('./config/env');
 const { listProperties, getProperty } = require('./services/property.service');
 const { createTelegramRequest } = require('./services/request.service');
@@ -9,6 +10,8 @@ const escapeHtml = require('./utils/escapeHtml');
 const formatPrice = require('./utils/formatPrice');
 
 const sessions = new Map();
+
+const isDbConnected = () => mongoose.connection.readyState === 1;
 
 const PROPERTY_TYPE_OPTIONS = [
   { label: 'Kop qavatli dom', value: 'Ko\u2018p qavatli dom' },
@@ -44,6 +47,7 @@ const isTelegramFetchableImage = (url = '') =>
 
 const upsertTelegramUser = async (from = {}, contact = null) => {
   if (!from.id) return null;
+  if (!isDbConnected()) return null;
   const update = {
     telegramId: String(from.id),
     firstName: from.first_name || '',
@@ -227,6 +231,10 @@ const showMap = async (bot, chatId, id) => {
 };
 
 const toggleFavorite = async (bot, chatId, telegramId, propertyId) => {
+  if (!isDbConnected()) {
+    await bot.sendMessage(chatId, 'Sevimlilar hozircha ishlamayapti: MongoDB ulanmagan. Uylarni korish esa ishlaydi.');
+    return;
+  }
   const query = { telegramId: String(telegramId), propertyId };
   const existing = await Favorite.findOne(query);
   if (existing) {
@@ -239,6 +247,10 @@ const toggleFavorite = async (bot, chatId, telegramId, propertyId) => {
 };
 
 const showFavorites = async (bot, chatId, telegramId) => {
+  if (!isDbConnected()) {
+    await bot.sendMessage(chatId, 'Sevimlilar hozircha ishlamayapti: MongoDB ulanmagan.');
+    return;
+  }
   const favorites = await Favorite.find({ telegramId: String(telegramId) })
     .sort('-createdAt')
     .limit(10)
@@ -257,6 +269,10 @@ const showFavorites = async (bot, chatId, telegramId) => {
 };
 
 const startRequest = async (bot, chatId, telegramId, propertyId) => {
+  if (!isDbConnected()) {
+    await bot.sendMessage(chatId, 'Ariza qoldirish hozircha ishlamayapti: MongoDB ulanmagan. Iltimos, saytdagi aloqa tugmasidan foydalaning.');
+    return;
+  }
   sessions.set(String(telegramId), { type: 'request:name', propertyId, data: {} });
   await bot.sendMessage(chatId, 'Ismingizni yuboring:', {
     reply_markup: { keyboard: [['Bekor qilish']], resize_keyboard: true },
@@ -371,7 +387,19 @@ const createBot = () => {
     throw new Error('BOT_TOKEN is required. Create telegram-bot/.env and add your BotFather token.');
   }
 
-  const bot = new TelegramBot(env.botToken, { polling: true });
+  const botOptions = {
+    polling: true,
+  };
+
+  if (env.allowInsecureTls) {
+    botOptions.request = {
+      agentOptions: {
+        rejectUnauthorized: false,
+      },
+    };
+  }
+
+  const bot = new TelegramBot(env.botToken, botOptions);
 
   bot.on('message', async (msg) => {
     try {
