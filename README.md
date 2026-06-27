@@ -58,9 +58,10 @@ NODE_ENV=development
 MONGODB_URI=mongodb://localhost:27017/house-finder
 JWT_SECRET=your_jwt_secret_here
 CLIENT_URL=http://localhost:5173
+CORS_ORIGINS=http://localhost:5173
 ```
 
-Cookie auth requires the frontend origin to match `CLIENT_URL`. In local development, use `http://localhost:5173`, not `http://127.0.0.1:5173`, unless you also update `CLIENT_URL`.
+Cookie auth requires the frontend origin to match `CLIENT_URL` or be listed in `CORS_ORIGINS`. In local development, use `http://localhost:5173`, not `http://127.0.0.1:5173`, unless you also update those values.
 
 ## Seed Demo Data
 
@@ -147,7 +148,8 @@ Logged-in users can create property listings with `POST /api/properties`; edit/d
 - Set `NODE_ENV=production`.
 - Use a strong `JWT_SECRET`.
 - Set `CLIENT_URL` to the deployed frontend URL.
-- Set `VITE_API_URL` to the deployed backend API URL.
+- Set `CORS_ORIGINS` to allowed frontend origins, separated by commas if there is more than one.
+- Set `VITE_API_URL` to the deployed backend API URL including `/api`, for example `https://gw70.onrender.com/api`.
 - For cross-site production cookies, the backend uses `secure: true` and `sameSite: "none"`.
 - Use MongoDB Atlas or another managed MongoDB service for production.
 

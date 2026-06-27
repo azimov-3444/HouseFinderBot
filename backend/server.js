@@ -14,6 +14,31 @@ connectDB();
 
 const app = express();
 
+const configuredOrigins = [
+  process.env.CLIENT_URL,
+  process.env.CORS_ORIGINS,
+  'http://localhost:5173',
+  'http://127.0.0.1:5173',
+  'https://stately-bunny-80d677.netlify.app',
+]
+  .filter(Boolean)
+  .flatMap((origin) => origin.split(','))
+  .map((origin) => origin.trim().replace(/\/$/, ''))
+  .filter(Boolean);
+
+const allowedOrigins = [...new Set(configuredOrigins)];
+
+const corsOptions = {
+  origin(origin, callback) {
+    if (!origin || allowedOrigins.includes(origin.replace(/\/$/, ''))) {
+      return callback(null, true);
+    }
+
+    return callback(new Error(`Origin ${origin} is not allowed by CORS`));
+  },
+  credentials: true,
+};
+
 // Body parser
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -22,12 +47,8 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 // CORS configuration (crucial for cookies to work!)
-app.use(
-  cors({
-    origin:  "*", // Allow all origins for development; adjust in production
-    credentials: true,
-  })
-);
+app.use(cors(corsOptions));
+app.options('*', cors(corsOptions));
 
 // Serve static upload files
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
