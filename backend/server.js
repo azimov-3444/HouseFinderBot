@@ -53,17 +53,40 @@ app.options('*', cors(corsOptions));
 // Serve static upload files
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
+const authRoutes = require('./routes/authRoutes');
+const propertyRoutes = require('./routes/propertyRoutes');
+const categoryRoutes = require('./routes/categoryRoutes');
+const contactRequestRoutes = require('./routes/contactRequestRoutes');
+const adminRoutes = require('./routes/adminRoutes');
+const uploadRoutes = require('./routes/uploadRoutes');
+const aiRoutes = require('./routes/aiRoutes');
+const crmRoutes = require('./routes/crmRoutes');
+const complaintRoutes = require('./routes/complaintRoutes');
+const currencyRoutes = require('./routes/currencyRoutes');
+
 // Routes
-app.use('/api/auth', require('./routes/authRoutes'));
-app.use('/api/properties', require('./routes/propertyRoutes'));
-app.use('/api/categories', require('./routes/categoryRoutes'));
-app.use('/api/contact-requests', require('./routes/contactRequestRoutes'));
-app.use('/api/admin', require('./routes/adminRoutes'));
-app.use('/api/upload', require('./routes/uploadRoutes'));
-app.use('/api/ai', require('./routes/aiRoutes'));
-app.use('/api/crm', require('./routes/crmRoutes'));
-app.use('/api/complaints', require('./routes/complaintRoutes'));
-app.use('/api/currency', require('./routes/currencyRoutes'));
+app.use('/api/auth', authRoutes);
+app.use('/api/properties', propertyRoutes);
+app.use('/api/categories', categoryRoutes);
+app.use('/api/contact-requests', contactRequestRoutes);
+app.use('/api/admin', adminRoutes);
+app.use('/api/upload', uploadRoutes);
+app.use('/api/ai', aiRoutes);
+app.use('/api/crm', crmRoutes);
+app.use('/api/complaints', complaintRoutes);
+app.use('/api/currency', currencyRoutes);
+
+// Backward-compatible routes for deployed clients built with the API root URL.
+app.use('/auth', authRoutes);
+app.use('/properties', propertyRoutes);
+app.use('/categories', categoryRoutes);
+app.use('/contact-requests', contactRequestRoutes);
+app.use('/admin', adminRoutes);
+app.use('/upload', uploadRoutes);
+app.use('/ai', aiRoutes);
+app.use('/crm', crmRoutes);
+app.use('/complaints', complaintRoutes);
+app.use('/currency', currencyRoutes);
 
 // Root endpoint for healthcheck
 app.get('/', (req, res) => {
